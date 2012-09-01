@@ -9,9 +9,13 @@
 
 `coffee ./application.coffee`
 
-## production
+### production
 
 ```
 npm install -g forever
 ./forexec
 ```
+
+#### restart
+
+`./forexec`

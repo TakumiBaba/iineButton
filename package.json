@@ -8,7 +8,7 @@
   "dependencies": {
     "underscore": "*",
     "coffee-script": "*",
-    "express": "3.0.0rc2",
+    "express": "*",
     "jade": "*",
     "less-middleware": "*",
     "coffee-middleware": "git://github.com/geta6/express-coffee.git"
