@@ -1,0 +1,6 @@
+#!/bin/sh
+
+EXEC=`ls | grep .coffee`
+
+forever stop $EXEC
+NODE_ENV=production forever start -c coffee ./$EXEC

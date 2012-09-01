@@ -1,5 +1,7 @@
 #!/usr/bin/env coffee
 
+require 'coffee-script'
+
 routes  = require './routes'
 http    = require 'http'
 

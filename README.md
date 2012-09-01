@@ -1,12 +1,17 @@
-# rapid express
+# rapid-express
 
-* `express 3.0.0rc2`
-* coffee-script
-* less
+## initialize
 
-# middleware
-1. request to `/*/*.{css,js}`
-2. express find and compile `/*/*.{less,coffee}` to `/*/*.{css,js}`
+`npm install`
 
-# start server
-`./application`
+## exec
+### development
+
+`coffee ./application.coffee`
+
+## production
+
+```
+npm install -g forever
+./forexec
+```

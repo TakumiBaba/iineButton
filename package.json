@@ -3,9 +3,11 @@
   "version": "0.0.3",
   "private": true,
   "scripts": {
-    "start": "coffee application"
+    "start": "./forexec"
   },
   "dependencies": {
+    "underscore": "*",
+    "coffee-script": "*",
     "express": "3.0.0rc2",
     "jade": "*",
     "less-middleware": "*",
