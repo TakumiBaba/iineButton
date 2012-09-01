@@ -1,12 +1,12 @@
 #!/usr/bin/env coffee
 
 require 'coffee-script'
+_ = require 'underscore'
 
-routes  = require './routes'
-http    = require 'http'
-
-express = require 'express'
-app = express()
+http     = require 'http'
+routes   = require './routes'
+express  = require 'express'
+app      = express()
 
 app.configure ->
   app.set 'port', process.env.PORT || 3000
@@ -16,10 +16,12 @@ app.configure ->
   app.use express.logger 'dev'
   app.use express.bodyParser()
   app.use express.methodOverride()
+  app.use express.compress()
   app.use app.router
   app.use require('less-middleware') "#{__dirname}/public"
   app.use require('coffee-middleware') "#{__dirname}/public"
   app.use express.static "#{__dirname}/public"
+  app.use routes.failed
 
 app.configure 'development', ->
   app.use express.errorHandler()

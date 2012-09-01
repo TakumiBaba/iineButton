@@ -1,21 +1,40 @@
-# rapid-express
+# city
+
+template for node.js
+
+## module
+
+* `less`
+* `coffee-script`
+* `underscore`
+* `jade`
+* `express`
+
+## require for production
+
+* `npm -g install forever`
 
 ## initialize
 
-`npm install`
+```
+npm install
+npm -g install forever coffee-script
+```
 
-## exec
+## execute
 ### development
 
-`coffee ./application.coffee`
+```
+coffee ./application.coffee
+```
 
 ### production
 
+3 scripts defined.
+
 ```
-npm install -g forever
-./forexec
+npm start
+npm stop
+npm restart
 ```
 
-#### restart
-
-`./forexec`
