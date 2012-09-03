@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 require 'coffee-script'
-_ = require 'underscore'
+global._ = require 'underscore'
 
 http     = require 'http'
 routes   = require './routes'
