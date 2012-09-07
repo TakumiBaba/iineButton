@@ -6,7 +6,11 @@ global._ = require 'underscore'
 http     = require 'http'
 routes   = require './routes'
 express  = require 'express'
+net      = require 'net'
 app      = express()
+
+sockPort = 8080
+host     = "192.168.111.12"
 
 app.configure ->
   app.set 'port', process.env.PORT || 3000
@@ -27,6 +31,8 @@ app.configure 'development', ->
   app.use express.errorHandler()
 
 app.get '/', routes.index
+app.post '/test', routes.test
+app.get '/list.json/time/:time/num/:num', routes.imagesjson
 
 http.createServer(app).listen app.get('port'), ->
   console.log "Express server listening on port #{app.get 'port'}"
