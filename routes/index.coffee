@@ -13,8 +13,12 @@ imageSchema = mongoose.Schema {
 Image = db.model 'image', imageSchema
 
 exports.index = (req, res) ->
+  res.contentType "application/json"
+  res.header("Access-Control-Allow-Origin", "*");
+  res.json {status: 'indexだよーん'}
 
-  res.render 'index'
+exports.websocket = (req, res)->
+  res.render 'websocket'
     req: req
 
 exports.failed = (req, res) ->
@@ -26,11 +30,17 @@ exports.upload = (req, res)->
   _count = 0;
   unixtime = Math.ceil t.getTime()/1000
   Count.find {}, (err, data)->
+    if err
+      console.log err
+      return res.json err
+
+    console.log data
     _count = data[0].count
     _count++
     Count.update {_id:data[0]._id}, {$set: {count:_count}}, (err,d)->
       if err
         console.log err
+        return res.json err
   fs.readFile req.files.image.path, (err, data)->
     newPath = "./public/images/like/"+_count+".jpg"
     fs.writeFile newPath,data, (err, data)->
@@ -38,12 +48,13 @@ exports.upload = (req, res)->
         console.log err
       console.log 'saved!'
       image = new Image()
-      image.url = "http://localhost:1218/images/like/"+_count+".jpg"
+      image.url = "http://olive.chi.mag.keio.ac.jp/images/like/"+_count+".jpg"
       image.count = _count
       image.time = new Date()
       image.save (err)->
         if err
           console.log err
+        io.sockets.emit "uploaded",{url: "http://olive.chi.mag.keio.ac.jp/images/like/"+_count+".jpg", count: _count}
         return res.json {status: "OK"}
 
 exports.initImages = (req,res)->
@@ -53,14 +64,6 @@ exports.initImages = (req,res)->
   Image.find({}).sort({count: "descending"}).exec (err, images)->
     console.log images
     res.json images
-  ###
-  json = []
-  imagesDir = fs.readdirSync "./public/images/like/"
-  imagesDir = imagesDir.sort()
-  for key in imagesDir
-    json.push "http://133.27.247.69:1217/images/like/"+key
-  res.json json
-  ###
 exports.latestImages = (req, res)->
   res.contentType "application/json"
   res.header("Access-Control-Allow-Origin", "*");
@@ -94,7 +97,6 @@ exports.initializeImage = (req, res)->
       console.log "reset"
       res.json {}
 
-
 exports.countUp = (req,res)->
   res.contentType "application/json"
   res.header "Access-Control-Allow-Origin", "*"
@@ -108,6 +110,14 @@ exports.countUp = (req,res)->
       if err
         return res.json err
       res.json {count: _count}
+
+exports.countGet = (req, res)->
+  res.contentType "application/json"
+  res.header "Access-Control-Allow-Origin", "*"
+  Count.find {}, (err,data)->
+    if err
+      return res.json err
+    return res.json {count: data[0].count}
 
 exports.countSet = (req, res)->
   res.contentType "application/json"
@@ -123,16 +133,17 @@ exports.countSet = (req, res)->
       return res.json {count: _count}
 
 
-exports.inititalizeCount = (req,res)->
+exports.initializeCount = (req,res)->
+  console.log "init count"
   res.contentType "application/json"
   res.header "Access-Control-Allow-Origin", "*"
   Count.remove {}, (err)->
     if err
-      res.json err
+      return res.json err
     else
       console.log "reset"
       count = new Count {count: 0}
       count.save (err)->
         if err
           return res.json err
-        res.json {count: 0}
+        return res.json {count: 0}
